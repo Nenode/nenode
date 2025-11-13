@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loading Nenode...</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.2/dist/full.css" rel="stylesheet" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f4f8;
+    }
+    .spinner-container {
+      text-align: center;
+    }
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #3c6e71;
+      font-weight: 600;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner-container">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+    <div class="loading-text">Nenode is loading...</div>
+  </div>
+
+  <script>
+    // Redirect to app.html after 3 seconds
+    setTimeout(() => {
+      window.location.href = 'app.html';
+    }, 3000);
+  </script>
+</body>
+</html>
