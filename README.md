@@ -12,4 +12,4 @@ The aim of Nenode is to create the best open source AI trainer, for new AI busin
 
 ## How does it work
 
-We use [brain.js](https://brain.js.org) for are 
+We use [brain.js](https://brain.js.org) for our neural network organiser.
