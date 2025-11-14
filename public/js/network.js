@@ -1,7 +1,7 @@
 // network.js
 
 import brain from 'brain.js';
-import trainingData from '../data/training.js';  // your training dataset import
+import trainingData from '../data/training.json';  // your training dataset import
 
 // Initialize the Brain.js network
 const net = new brain.NeuralNetwork({
