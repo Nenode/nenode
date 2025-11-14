@@ -1,58 +1,54 @@
 // network.js
 
 import brain from 'brain.js';
-import trainingData from '../data/training.json'; // your training dataset import
+import trainingData from '../data/training.json';  // JSON of [{input:{key:1}, output:{key:1}}...]
 
-// Initialize the Brain.js network instance with hidden layers and sigmoid activation
 const net = new brain.NeuralNetwork({
   hiddenLayers: [128, 64],
   activation: 'sigmoid',
 });
 
-// Preprocess input/output strings to normalized keys (lowercase, alphanumeric only)
 function preprocess(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-// Format training data by preprocessing keys on both input and output
+// Format training data keys with preprocessing
 const formattedTrainingData = trainingData.map(({ input, output }) => ({
   input: Object.fromEntries(
-    Object.entries(input).map(([key, value]) => [preprocess(key), value])
+    Object.entries(input).map(([key, val]) => [preprocess(key), val])
   ),
   output: Object.fromEntries(
-    Object.entries(output).map(([key, value]) => [preprocess(key), value])
+    Object.entries(output).map(([key, val]) => [preprocess(key), val])
   ),
 }));
 
-// Train the network synchronously
 net.train(formattedTrainingData, {
   iterations: 20000,
   learningRate: 0.3,
+  errorThresh: 0.005,
   log: true,
   logPeriod: 1000,
-  errorThresh: 0.005,
 });
 
-// Function to generate chatbot reply given a user message
 export function getBotReply(message) {
-  if (!message) return "Please say something.";
+  if (!message) return 'Please say something!';
 
-  const cleanedInput = preprocess(message);
-  const result = net.run({ [cleanedInput]: 1 });
+  const cleanedKey = preprocess(message);
+  const result = net.run({ [cleanedKey]: 1 });
 
-  // Select the output with the highest confidence
-  let maxKey = null;
-  let maxValue = 0;
-  for (const key in result) {
-    if (result[key] > maxValue) {
-      maxValue = result[key];
-      maxKey = key;
+  const keys = Object.keys(result);
+  if (keys.length === 0) return "Sorry, I don't understand.";
+
+  let maxKey = keys[0];
+  let maxVal = result[maxKey];
+  for (const k of keys) {
+    if (result[k] > maxVal) {
+      maxKey = k;
+      maxVal = result[k];
     }
   }
 
-  if (!maxKey || maxValue < 0.3) {
-    return "Could you say that differently?";
-  }
+  if (maxVal < 0.3) return 'Could you say that differently?';
 
   return maxKey;
 }
