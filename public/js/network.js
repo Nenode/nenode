@@ -1,40 +1,55 @@
-// js/network.js
+// network.js
 
-// Create the LSTM neural network instance
-const net = new brain.recurrent.LSTM();
+import brain from 'brain.js';
+import trainingData from './training.js';  // your training dataset import
 
-// Load the premade trained model JSON file (your attached training.json)
-async function loadModel() {
-  try {
-    const response = await fetch('data/training.json');
-    if (!response.ok) throw new Error('Network response was not ok');
+// Initialize the Brain.js network
+const net = new brain.NeuralNetwork({
+  hiddenLayers: [128, 64],  // Adjust layer sizes for better performance as needed
+  activation: 'sigmoid'
+});
 
-    const jsonModel = await response.json();
-    net.fromJSON(jsonModel);
-    console.log('Model loaded successfully!');
-  } catch (error) {
-    console.error('Failed to load model:', error);
+// Preprocess inputs into format compatible with training data keys
+function preprocess(input) {
+  return input.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+// Format training data to match Brain.js expected input/output shape
+const formattedTrainingData = trainingData.map(({ input, output }) => ({
+  input: { [preprocess(input)]: 1 },
+  output: { [preprocess(output)]: 1 },
+}));
+
+// Train the network on your training data
+net.train(formattedTrainingData, {
+  iterations: 20000,
+  learningRate: 0.3,
+  log: true,
+  logPeriod: 1000,
+  errorThresh: 0.005,
+});
+
+// Given a user message, return the bot reply
+export function getBotReply(message) {
+  if (!message) return 'Please say something!';
+
+  const cleaned = preprocess(message);
+  const result = net.run({ [cleaned]: 1 });
+  
+  // Pick response with highest confidence
+  const keys = Object.keys(result);
+  if (keys.length === 0) return "Sorry, I don't understand.";
+
+  let maxKey = keys[0];
+  let maxVal = result[maxKey];
+  for (const k of keys) {
+    if (result[k] > maxVal) {
+      maxVal = result[k];
+      maxKey = k;
+    }
   }
+
+  if (maxVal < 0.3) return 'Could you say that differently?';
+
+  return maxKey;
 }
-
-// Normalize input text by lowercasing and removing non-alphanumeric characters
-function preprocess(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]/g, '');
-}
-
-// Generate chatbot reply using the loaded model
-function getBotReply(message) {
-  if (!net) return 'Model not loaded yet, please wait...';
-
-  try {
-    const normalizedInput = preprocess(message);
-    const output = net.run(normalizedInput);
-    return output || "Sorry, I don't understand that.";
-  } catch (error) {
-    console.error('Error during network run:', error);
-    return "Sorry, something went wrong.";
-  }
-}
-
-// Call to load model when the script is first run
-loadModel();
