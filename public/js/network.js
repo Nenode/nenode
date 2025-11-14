@@ -2,15 +2,18 @@
 
 let net;
 
-// Characters we consider for input encoding (a-z and space)
+// Characters allowed in input encoding
 const chars = "abcdefghijklmnopqrstuvwxyz ";
 
+// Convert a text string to a character-level input vector
 function textToInputVector(text) {
   text = text.toLowerCase();
   const input = {};
+  // Initialize all chars to 0
   for (const char of chars) {
     input[char] = 0;
   }
+  // Set present chars to 1
   for (const char of text) {
     if (chars.includes(char)) {
       input[char] = 1;
@@ -19,6 +22,7 @@ function textToInputVector(text) {
   return input;
 }
 
+// Load training data, preprocess it, and train the neural network
 function loadTrainingData(callback) {
   fetch('data/training.json')
     .then(response => {
@@ -26,23 +30,25 @@ function loadTrainingData(callback) {
       return response.json();
     })
     .then(trainingData => {
-      net = new brain.NeuralNetwork();
+      net = new brain.NeuralNetwork({
+        hiddenLayers: [128, 64]  // Two hidden layers for more capacity
+      });
 
-      const trainingOptions = {
-        iterations: 20000,
-        errorThresh: 0.005,
-        log: true,
-        logPeriod: 500,
-        learningRate: 0.3
-      };
-
-      // Preprocess training inputs to vector form
+      // Preprocess training data input keys
       const processedData = trainingData.map(item => ({
         input: textToInputVector(Object.keys(item.input)[0]),
         output: item.output
       }));
 
-      net.train(processedData, trainingOptions);
+      // Train with more iterations and lower error threshold
+      net.train(processedData, {
+        iterations: 30000,
+        errorThresh: 0.003,
+        log: true,
+        logPeriod: 500,
+        learningRate: 0.3
+      });
+
       if (callback) callback();
     })
     .catch(error => {
@@ -51,7 +57,7 @@ function loadTrainingData(callback) {
     });
 }
 
-// Use character-level input vector for run too
+// Given a message, return the chatbot reply with confidence checks and randomness
 function getBotReply(message) {
   if (!net) return "Training not loaded yet.";
   const inputVector = textToInputVector(message);
@@ -61,28 +67,29 @@ function getBotReply(message) {
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
 
-  // Confidence threshold and weighted random selection
+  // Find highest confidence output
   let maxKey = keys[0];
   let maxVal = result[maxKey];
-  keys.forEach(k => {
+  for (const k of keys) {
     if (result[k] > maxVal) {
       maxVal = result[k];
       maxKey = k;
     }
-  });
+  }
 
+  // Confidence threshold fallback
   if (maxVal < 0.3) {
     return "Sorry, I didn't quite get that. Can you rephrase?";
   }
 
+  // Weighted random among outputs above 0.05 threshold
   const filteredKeys = keys.filter(k => result[k] > 0.05);
   const totalWeight = filteredKeys.reduce((sum, k) => sum + result[k], 0);
   let threshold = Math.random() * totalWeight;
-
   for (const key of filteredKeys) {
     threshold -= result[key];
     if (threshold <= 0) return key;
   }
 
-  return maxKey;
+  return maxKey; // fallback
 }
