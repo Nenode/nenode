@@ -43,6 +43,6 @@ function getBotReply(message) {
       maxVal = result[k];
     }
   });
-  if (maxVal < 0.3) return "Could you say that differently?";
+  if (maxVal < 0.1) return "Could you say that differently?";
   return maxKey;
 }
