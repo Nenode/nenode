@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chat - Nenode</title>
-  <!-- Brain.js from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
-  <script src="js/network.js" defer></script>
-  <script src="js/chat.js" defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-primary: #000000;
@@ -58,6 +54,9 @@
       border-radius: 16px;
       overflow: hidden;
       animation: fadeIn 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      height: 600px;
     }
 
     @keyframes fadeIn {
@@ -69,6 +68,7 @@
     .chat-header {
       padding: 1.5rem 1.5rem 1.25rem;
       border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
 
     h2 {
@@ -87,6 +87,7 @@
 
     /* Chat log */
     #chat-log {
+      flex-grow: 1;
       height: 450px;
       overflow-y: auto;
       padding: 1.5rem;
@@ -94,6 +95,7 @@
       flex-direction: column;
       gap: 1.25rem;
       scroll-behavior: smooth;
+      background: var(--bg-secondary);
     }
 
     /* Custom scrollbar */
@@ -122,6 +124,7 @@
       animation: messageSlide 0.3s ease;
       opacity: 0;
       animation-fill-mode: forwards;
+      max-width: 80%;
     }
 
     @keyframes messageSlide {
@@ -136,10 +139,12 @@
     }
 
     .message.user {
+      align-self: flex-end;
       align-items: flex-end;
     }
 
     .message.bot {
+      align-self: flex-start;
       align-items: flex-start;
     }
 
@@ -153,29 +158,32 @@
     }
 
     .message-bubble {
-      max-width: 80%;
       padding: 0.875rem 1rem;
       border-radius: 12px;
       line-height: 1.6;
       font-size: 0.9375rem;
       word-wrap: break-word;
+      white-space: pre-wrap;
     }
 
     .user .message-bubble {
       background: var(--user-bubble);
       color: var(--bg-primary);
+      border-radius: 12px 12px 0 12px;
     }
 
     .bot .message-bubble {
       background: var(--bot-bubble);
       color: var(--text-primary);
       border: 1px solid var(--border);
+      border-radius: 12px 12px 12px 0;
     }
 
     /* Input area */
     .chat-input-area {
       padding: 1.25rem 1.5rem 1.5rem;
       border-top: 1px solid var(--border);
+      flex-shrink: 0;
     }
 
     #chat-form {
@@ -290,7 +298,7 @@
 
     <div class="chat-input-area">
       <form id="chat-form" autocomplete="off">
-        <input type="text" id="chat-input" maxlength="100" placeholder="Message..." required>
+        <input type="text" id="chat-input" maxlength="100" placeholder="Message..." required />
         <button type="submit">Send</button>
       </form>
     </div>
@@ -302,7 +310,7 @@
       document.documentElement.classList.add('light');
     }
 
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (event) => {
       if (event.matches) {
         document.documentElement.classList.add('light');
       } else {
@@ -310,7 +318,7 @@
       }
     });
 
-    // Clear empty state when first message is sent
+    // Clear empty state when first message arrives
     const chatLog = document.getElementById('chat-log');
     const observer = new MutationObserver((mutations) => {
       const emptyState = chatLog.querySelector('.empty-state');
@@ -324,5 +332,10 @@
 
     observer.observe(chatLog, { childList: true });
   </script>
+
+  <!-- Load scripts at bottom to ensure DOM is loaded -->
+  <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/chat.js"></script>
 </body>
 </html>
