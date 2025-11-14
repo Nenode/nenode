@@ -1,5 +1,8 @@
 // js/chat.js
 
+// Ensure loadTrainingData is imported from your network.js or available globally
+
+// Initialize chat after training data is loaded
 loadTrainingData(() => {
   addToLog("Hello, I am Nenode! Ask me anything.", 'bot');
 });
@@ -16,12 +19,14 @@ function addToLog(text, sender) {
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-chatForm.addEventListener('submit', function(e) {
+chatForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const userMsg = chatInput.value.trim();
   if (!userMsg) return;
   addToLog(userMsg, 'user');
   chatInput.value = '';
-  const reply = getBotReply(userMsg); // From network.js
+
+  // Wait for training to complete before replying
+  const reply = getBotReply(userMsg); // getBotReply should handle untrained state internally
   setTimeout(() => addToLog(reply, 'bot'), 200);
 });
