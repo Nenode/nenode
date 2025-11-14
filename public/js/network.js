@@ -37,7 +37,6 @@ function preprocess(text) {
   return obj;
 }
 
-// Choose a reply using weighted random sampling from brain.js output scores
 function getBotReply(message) {
   if (!net) return "Training not loaded yet.";
   const result = net.run(preprocess(message));
@@ -46,16 +45,30 @@ function getBotReply(message) {
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
 
-  // Total weight sum of all possible outputs
-  const totalWeight = keys.reduce((sum, key) => sum + result[key], 0);
-  let randomThreshold = Math.random() * totalWeight;
+  // Find max output and check confidence threshold
+  let maxKey = keys[0];
+  let maxVal = result[maxKey];
+  keys.forEach(k => {
+    if (result[k] > maxVal) {
+      maxKey = k;
+      maxVal = result[k];
+    }
+  });
 
-  // Walk through keys weighted by their activation scores to randomly pick
-  for (const key of keys) {
-    randomThreshold -= result[key];
-    if (randomThreshold <= 0) return key;
+  // Confidence threshold check; if too low, use fallback
+  if (maxVal < 0.3) {
+    return "Sorry, I didn't quite get that. Can you rephrase?";
   }
 
-  // Fallback (shouldn't hit here)
-  return keys[0];
+  // Weighted random selection among outputs with significant score
+  const filteredKeys = keys.filter(k => result[k] > 0.05);
+  let totalWeight = filteredKeys.reduce((sum, k) => sum + result[k], 0);
+  let threshold = Math.random() * totalWeight;
+
+  for (const key of filteredKeys) {
+    threshold -= result[key];
+    if (threshold <= 0) return key;
+  }
+
+  return maxKey; // fallback
 }
