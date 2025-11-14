@@ -1,18 +1,12 @@
-// network.js
-
 import brain from 'brain.js';
-import trainingData from '../data/training.json';  // JSON of [{input:{key:1}, output:{key:1}}...]
+import trainingData from '../data/training.json';
 
-const net = new brain.NeuralNetwork({
-  hiddenLayers: [128, 64],
-  activation: 'sigmoid',
-});
-
+// Normalize strings for keys used in training and inference
 function preprocess(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-// Format training data keys with preprocessing
+// Preprocess training data keys
 const formattedTrainingData = trainingData.map(({ input, output }) => ({
   input: Object.fromEntries(
     Object.entries(input).map(([key, val]) => [preprocess(key), val])
@@ -22,6 +16,12 @@ const formattedTrainingData = trainingData.map(({ input, output }) => ({
   ),
 }));
 
+const net = new brain.NeuralNetwork({
+  hiddenLayers: [128, 64],
+  activation: 'sigmoid',
+});
+
+// Train network (can reduce iterations to speed up)
 net.train(formattedTrainingData, {
   iterations: 20000,
   learningRate: 0.3,
@@ -31,24 +31,25 @@ net.train(formattedTrainingData, {
 });
 
 export function getBotReply(message) {
-  if (!message) return 'Please say something!';
+  if (!message) return 'Please say something.';
 
-  const cleanedKey = preprocess(message);
-  const result = net.run({ [cleanedKey]: 1 });
+  const cleanedInput = preprocess(message);
+  const result = net.run({ [cleanedInput]: 1 });
 
   const keys = Object.keys(result);
-  if (keys.length === 0) return "Sorry, I don't understand.";
+  if (!keys.length) return "Sorry, I didn't understand.";
 
   let maxKey = keys[0];
-  let maxVal = result[maxKey];
-  for (const k of keys) {
-    if (result[k] > maxVal) {
-      maxKey = k;
-      maxVal = result[k];
-    }
-  }
+  let maxValue = result[maxKey];
 
-  if (maxVal < 0.3) return 'Could you say that differently?';
+  keys.forEach((key) => {
+    if (result[key] > maxValue) {
+      maxKey = key;
+      maxValue = result[key];
+    }
+  });
+
+  if (maxValue < 0.3) return 'Could you say that differently?';
 
   return maxKey;
 }
