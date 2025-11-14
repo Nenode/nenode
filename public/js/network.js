@@ -1,49 +1,50 @@
-// js/network.js
+let net;
 
-import brain from 'brain.js';
-import trainingData from '../data/training.json'; // Your properly formatted training JSON
-
-// Normalize message string keys consistently
+// Simple preprocessing function to normalize keys
 function preprocess(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-// Format training data keys for brain.js network training
-const formattedTrainingData = trainingData.map(({ input, output }) => ({
-  input: Object.fromEntries(
-    Object.entries(input).map(([key, val]) => [preprocess(key), val])
-  ),
-  output: Object.fromEntries(
-    Object.entries(output).map(([key, val]) => [preprocess(key), val])
-  ),
-}));
+// Load training data JSON and train network
+function loadTrainingData(callback) {
+  fetch('../data/training.json')
+    .then(resp => resp.json())
+    .then(trainingData => {
+      net = new brain.NeuralNetwork();
 
-// Initialize the Neural Network with chosen structure and activation
-const net = new brain.NeuralNetwork({
-  hiddenLayers: [128, 64],
-  activation: 'sigmoid',
-});
+      // Map and preprocess training data keys
+      const formattedData = trainingData.map(({ input, output }) => ({
+        input: Object.fromEntries(
+          Object.entries(input).map(([k, v]) => [preprocess(k), v])
+        ),
+        output: Object.fromEntries(
+          Object.entries(output).map(([k, v]) => [preprocess(k), v])
+        ),
+      }));
 
-// Train the network on the formatted training data
-net.train(formattedTrainingData, {
-  iterations: 20000,
-  learningRate: 0.3,
-  errorThresh: 0.005,
-  log: true,
-  logPeriod: 1000,
-});
+      net.train(formattedData, {
+        iterations: 10000,
+        learningRate: 0.3,
+        log: false
+      });
 
-// Generate a bot reply to a user message
-export function getBotReply(message) {
-  if (!message) return 'Please say something!';
+      if (callback) callback();
+    })
+    .catch(() => alert('Failed to load training data.'));
+}
 
-  const cleanedInput = preprocess(message);
-  const result = net.run({ [cleanedInput]: 1 });
+// Get reply from net given user message
+function getBotReply(message) {
+  if (!net) return "Training not finished yet.";
+  if (!message) return "Please say something.";
+
+  const result = net.run(preprocess(message));
+  if (!result) return "Sorry, I don't understand.";
 
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
 
-  // Pick the result with highest confidence
+  // Select highest confidence output key
   let maxKey = keys[0];
   let maxVal = result[maxKey];
   keys.forEach(k => {
@@ -53,8 +54,10 @@ export function getBotReply(message) {
     }
   });
 
-  // Threshold for confident result
   if (maxVal < 0.3) return "Could you say that differently?";
 
   return maxKey;
 }
+
+// Export functions
+export { loadTrainingData, getBotReply };
