@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" >
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loading Nenode...</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-start: #0a0e27;
-      --bg-end: #1a1f3a;
-      --accent-primary: #00d9ff;
-      --accent-secondary: #7000ff;
+      --bg: #000000;
       --text-primary: #ffffff;
-      --text-secondary: #a0aec0;
-      --glow: rgba(0, 217, 255, 0.3);
+      --text-secondary: #737373;
+      --spinner: #ffffff;
     }
 
     .light {
-      --bg-start: #f8fafc;
-      --bg-end: #e2e8f0;
-      --accent-primary: #0891b2;
-      --accent-secondary: #6366f1;
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --glow: rgba(8, 145, 178, 0.2);
+      --bg: #ffffff;
+      --text-primary: #000000;
+      --text-secondary: #737373;
+      --spinner: #000000;
     }
 
     * {
@@ -34,131 +28,41 @@
 
     body, html {
       height: 100%;
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      position: relative;
-      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background: var(--bg);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* Animated background pattern */
-    body::before {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background-image:
-        repeating-linear-gradient(45deg, transparent, transparent 60px, var(--glow) 60px, var(--glow) 62px),
-        repeating-linear-gradient(-45deg, transparent, transparent 60px, var(--glow) 60px, var(--glow) 62px);
-      animation: gridMove 20s linear infinite;
-      opacity: 0.15;
-    }
-
-    @keyframes gridMove {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(60px, 60px); }
-    }
-
-    /* Floating orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.4;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .orb-1 {
-      width: 300px;
-      height: 300px;
-      background: var(--accent-primary);
-      top: 10%;
-      left: 15%;
-      animation-delay: 0s;
-    }
-
-    .orb-2 {
-      width: 250px;
-      height: 250px;
-      background: var(--accent-secondary);
-      bottom: 20%;
-      right: 10%;
-      animation-delay: 2s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -30px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.9); }
-    }
-
-    /* Main container */
     .loading-container {
-      position: relative;
-      z-index: 10;
       text-align: center;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: fadeIn 0.4s ease;
     }
 
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(30px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
-    /* Custom spinner */
-    .spinner-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto;
-    }
-
+    /* Simple spinner */
     .spinner {
-      width: 120px;
-      height: 120px;
-      border: 4px solid transparent;
-      border-top-color: var(--accent-primary);
-      border-right-color: var(--accent-secondary);
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--text-secondary);
+      border-top-color: var(--spinner);
       border-radius: 50%;
-      animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-    }
-
-    .spinner::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      right: 8px;
-      bottom: 8px;
-      border: 4px solid transparent;
-      border-top-color: var(--accent-secondary);
-      border-left-color: var(--accent-primary);
-      border-radius: 50%;
-      animation: spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
-    }
-
-    .spinner-center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 50%;
-      box-shadow: 0 0 20px var(--glow);
-      animation: pulse 2s ease-in-out infinite;
+      margin: 0 auto;
+      animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
@@ -166,116 +70,39 @@
       100% { transform: rotate(360deg); }
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-      50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }
-    }
-
-    /* Text styling */
     .brand-name {
-      margin-top: 2.5rem;
-      font-size: 3rem;
-      font-weight: 700;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
       color: var(--text-primary);
-      letter-spacing: -0.02em;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      letter-spacing: -0.01em;
     }
 
     .loading-text {
-      margin-top: 1rem;
-      font-size: 1.125rem;
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
-      font-weight: 500;
-      font-family: 'JetBrains Mono', monospace;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s backwards;
-    }
-
-    .dots {
-      display: inline-block;
-      width: 1.5em;
-      text-align: left;
-    }
-
-    .dots::after {
-      content: '...';
-      animation: dots 1.5s steps(4, end) infinite;
-    }
-
-    @keyframes dots {
-      0%, 20% { content: ''; }
-      40% { content: '.'; }
-      60% { content: '..'; }
-      80%, 100% { content: '...'; }
-    }
-
-    /* Progress bar */
-    .progress-container {
-      margin-top: 2rem;
-      width: 280px;
-      height: 4px;
-      background: var(--text-secondary);
-      opacity: 0.2;
-      border-radius: 2px;
-      overflow: hidden;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 2px;
-      animation: progress 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      box-shadow: 0 0 10px var(--glow);
-    }
-
-    @keyframes progress {
-      0% { width: 0%; }
-      100% { width: 100%; }
+      font-weight: 400;
     }
 
     /* Responsive */
     @media (max-width: 640px) {
       .brand-name {
-        font-size: 2.25rem;
+        font-size: 1.25rem;
       }
 
-      .spinner-wrapper,
       .spinner {
-        width: 90px;
-        height: 90px;
-      }
-
-      .progress-container {
-        width: 220px;
+        width: 40px;
+        height: 40px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Floating orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <!-- Main content -->
   <div class="loading-container">
-    <div class="spinner-wrapper">
-      <div class="spinner"></div>
-      <div class="spinner-center"></div>
-    </div>
-
+    <div class="spinner"></div>
     <h1 class="brand-name">Nenode</h1>
-
-    <div class="loading-text">
-      Initializing<span class="dots"></span>
-    </div>
-
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
+    <div class="loading-text">Loading...</div>
   </div>
 
   <script>
@@ -292,11 +119,10 @@
       }
     });
 
-    // Redirect to app.html after 3 seconds
+    // Redirect to app.html after 2 seconds
     setTimeout(() => {
       window.location.href = 'app.html';
-    }, 3000);
+    }, 2000);
   </script>
 </body>
 </html>
-
