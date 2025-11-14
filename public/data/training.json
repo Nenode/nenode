@@ -1,58 +1,100 @@
 [
-  {"input": {"hi": 1}, "output": {"hello": 1}},
-  {"input": {"hi": 1}, "output": {"hi": 1}},
-  {"input": {"hi": 1}, "output": {"how are you": 1}},
-  {"input": {"hi": 1}, "output": {"greetings": 1}},
+  {
+    "input": { "hi": 1 },
+    "output": {
+      "hello": 0.4,
+      "hi": 0.3,
+      "howareyou": 0.1,
+      "greetings": 0.2
+    }
+  },
 
-  {"input": {"hello": 1}, "output": {"hello": 1}},
-  {"input": {"hello": 1}, "output": {"hi": 1}},
-  {"input": {"hello": 1}, "output": {"how are you": 1}},
-  {"input": {"hello": 1}, "output": {"greetings": 1}},
+  {
+    "input": { "hello": 1 },
+    "output": {
+      "hello": 0.4,
+      "hi": 0.3,
+      "howareyou": 0.1,
+      "greetings": 0.2
+    }
+  },
 
-  {"input": {"howareyou": 1}, "output": {"good": 1}},
-  {"input": {"howareyou": 1}, "output": {"i am good": 1}},
-  {"input": {"howareyou": 1}, "output": {"excellent": 1}},
-  {"input": {"howareyou": 1}, "output": {"i am excellent": 1}},
-  {"input": {"howareyou": 1}, "output": {"great": 1}},
-  {"input": {"howareyou": 1}, "output": {"i am great": 1}},
+  {
+    "input": { "howareyou": 1 },
+    "output": {
+      "good": 0.15,
+      "iamgood": 0.2,
+      "excellent": 0.15,
+      "iamexcellent": 0.15,
+      "great": 0.2,
+      "iamgreat": 0.15
+    }
+  },
 
-  {"input": {"bye": 1}, "output": {"goodbye": 1}},
-  {"input": {"bye": 1}, "output": {"see you later": 1}},
-  {"input": {"bye": 1}, "output": {"have a nice day": 1}},
-  {"input": {"bye": 1}, "output": {"take care": 1}},
+  {
+    "input": { "bye": 1 },
+    "output": {
+      "goodbye": 0.4,
+      "seeyoulater": 0.3,
+      "havaniceday": 0.2,
+      "takecare": 0.1
+    }
+  },
 
-  {"input": {"thanks": 1}, "output": {"you are welcome": 1}},
-  {"input": {"thanks": 1}, "output": {"no problem": 1}},
-  {"input": {"thanks": 1}, "output": {"glad to help": 1}},
-  {"input": {"thankyou": 1}, "output": {"you are welcome": 1}},
-  {"input": {"thankyou": 1}, "output": {"my pleasure": 1}},
+  {
+    "input": { "thanks": 1 },
+    "output": {
+      "youarewelcome": 0.35,
+      "noproblem": 0.3,
+      "gladtohelp": 0.35
+    }
+  },
 
-  {"input": {"what'syourname": 1}, "output": {"I am Nenode": 1}},
-  {"input": {"what'syourname": 1}, "output": {"Nenode at your service": 1}},
-  {"input": {"whatareyoudoin": 1}, "output": {"talking with you": 1}},
-  {"input": {"whatareyoudoin": 1}, "output": {"helping you": 1}},
+  {
+    "input": { "thankyou": 1 },
+    "output": {
+      "youarewelcome": 0.5,
+      "mypleasure": 0.5
+    }
+  },
 
-  {"input": {"tellmeajoke": 1}, "output": {"Why did the computer show up at work late? It had a hard drive!": 1}},
-  {"input": {"tellmeajoke": 1}, "output": {"Why do programmers prefer dark mode? Because light attracts bugs.": 1}},
+  {
+    "input": { "whatsyourname": 1 },
+    "output": {
+      "iamnenode": 0.6,
+      "nenodeatyourservice": 0.4
+    }
+  },
 
-  {"input": {"help": 1}, "output": {"Sure, how can I assist you?": 1}},
-  {"input": {"help": 1}, "output": {"I'm here to help! What do you need?": 1}},
+  {
+    "input": { "whatareyoudoin": 1 },
+    "output": {
+      "talkingwithyou": 0.6,
+      "helpingyou": 0.4
+    }
+  },
 
-  {"input": {"what'stheweather": 1}, "output": {"I can't check weather yet": 1}},
-  {"input": {"what'stheweather": 1}, "output": {"Sorry, I don't have weather info": 1}},
+  {
+    "input": { "tellmeajoke": 1 },
+    "output": {
+      "whycomputershowatworklate": 0.5,
+      "whyprogrammerspreferdarkmode": 0.5
+    }
+  },
 
-  {"input": {"whoareyou": 1}, "output": {"I am a simple AI chatbot named Nenode.": 1}},
-  {"input": {"whoareyou": 1}, "output": {"Nenode, your friendly neural network bot.": 1}},
+  {
+    "input": { "help": 1 },
+    "output": {
+      "howcanIassistyou": 0.5,
+      "ImhereToHelp": 0.5
+    }
+  },
 
-  {"input": {"howoldareyou": 1}, "output": {"I don't have an age, I'm timeless.": 1}},
-  {"input": {"howoldareyou": 1}, "output": {"I was born from code!": 1}},
-
-  {"input": {"goodmorning": 1}, "output": {"Good morning! Hope you have a great day!": 1}},
-  {"input": {"goodnight": 1}, "output": {"Good night! Sleep well!": 1}},
-
-  {"input": {"canisayhitoyou": 1}, "output": {"Yes, please say hi!": 1}},
-  {"input": {"canisayhitoyou": 1}, "output": {"Of course! Hello!": 1}},
-
-  {"input": {"default": 1}, "output": {"Sorry, I didn't understand that.": 1}},
-  {"input": {"default": 1}, "output": {"Could you rephrase that?": 1}}
+  {
+    "input": { "default": 1 },
+    "output": {
+      "Ididntunderstand": 0.5,
+      "couldYouRephrase": 0.5
+    }
+  }
 ]
