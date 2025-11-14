@@ -16,5 +16,5 @@
   {"input": {"howareyou": 1}, "output": {"great": 1}},
   {"input": {"howareyou": 1}, "output": {"i am great": 1}},
 
-  {"input": {"bye": 1}, "output": {"goodbye": 1}},
+  {"input": {"bye": 1}, "output": {"goodbye": 1}}
 ]
