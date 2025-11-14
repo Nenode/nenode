@@ -28,12 +28,19 @@ function getBotReply(message) {
   if (!result) return "Sorry, I don't understand.";
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
-  let maxKey = keys[0], maxVal = result[maxKey];
-  keys.forEach(k => {
-    if (result[k] > maxVal) {
-      maxKey = k;
-      maxVal = result[k];
-    }
-  });
-  return maxKey;
+
+  // Compute total weight
+  const totalWeight = keys.reduce((sum, k) => sum + result[k], 0);
+
+  // Pick a random threshold
+  let threshold = Math.random() * totalWeight;
+
+  // Select output key by weighted random
+  for (const key of keys) {
+    threshold -= result[key];
+    if (threshold <= 0) return key;
+  }
+
+  // Fallback - return highest weighted key
+  return keys[0];
 }
