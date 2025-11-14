@@ -1,76 +1,38 @@
 // js/network.js
 
-let net;
+// Neural net setup and training data
+const net = new brain.NeuralNetwork();
 
-// Load training data and train network asynchronously
-function loadTrainingData(callback) {
-  fetch('data/training.json')
-    .then(resp => {
-      if (!resp.ok) throw new Error('Failed to fetch training data');
-      return resp.json();
-    })
-    .then(trainingData => {
-      net = new brain.NeuralNetwork({
-        hiddenLayers: [128, 64],
-        activation: 'sigmoid',
-      });
+// Very basic Q&A training data
+net.train([
+  {input: {hi: 1}, output: {hello: 1}},
+  {input: {hello: 1}, output: {hi: 1}},
+  {input: {howareyou: 1}, output: {good: 1}},
+  {input: {bye: 1}, output: {goodbye: 1}},
+]);
 
-      // Preprocess keys in training data
-      const preprocessed = trainingData.map(({ input, output }) => ({
-        input: Object.fromEntries(
-          Object.entries(input).map(([k, v]) => [preprocess(k), v])
-        ),
-        output: Object.fromEntries(
-          Object.entries(output).map(([k, v]) => [preprocess(k), v])
-        ),
-      }));
-
-      net.train(preprocessed, {
-        iterations: 20000,
-        learningRate: 0.3,
-        errorThresh: 0.005,
-        log: true,
-        logPeriod: 1000,
-      });
-
-      if (callback) callback();
-    })
-    .catch(error => {
-      console.error("Training data load or train failed", error);
-      alert("Failed to load or train on training data.");
-    });
-}
-
-// Normalize message strings to keys
+// Helper to process text input into {key:1} for training and running
 function preprocess(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]/gi, '');
+  // Lowercase and remove spaces
+  const key = text.replace(/[^a-z0-9]/gi,'').toLowerCase();
+  const obj = {};
+  obj[key] = 1;
+  return obj;
 }
 
-// Get bot reply after network trained
+// Given a user message, get bot reply
 function getBotReply(message) {
-  if (!net) return "Training not loaded yet.";
-  if (!message) return "Please say something.";
-
   const result = net.run(preprocess(message));
+  // Pick most likely output
   if (!result) return "Sorry, I don't understand.";
-
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
-
-  let maxKey = keys[0];
-  let maxVal = result[maxKey];
-
+  let maxKey = keys[0], maxVal = result[maxKey];
   keys.forEach(k => {
     if (result[k] > maxVal) {
       maxKey = k;
       maxVal = result[k];
     }
   });
-
-  if (maxVal < 0.3) return "Could you say that differently?";
-
   return maxKey;
 }
-
-// Export functions to use elsewhere
-export { loadTrainingData, getBotReply };
