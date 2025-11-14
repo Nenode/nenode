@@ -2,6 +2,23 @@
 
 let net;
 
+// Characters we consider for input encoding (a-z and space)
+const chars = "abcdefghijklmnopqrstuvwxyz ";
+
+function textToInputVector(text) {
+  text = text.toLowerCase();
+  const input = {};
+  for (const char of chars) {
+    input[char] = 0;
+  }
+  for (const char of text) {
+    if (chars.includes(char)) {
+      input[char] = 1;
+    }
+  }
+  return input;
+}
+
 function loadTrainingData(callback) {
   fetch('data/training.json')
     .then(response => {
@@ -11,16 +28,21 @@ function loadTrainingData(callback) {
     .then(trainingData => {
       net = new brain.NeuralNetwork();
 
-      // Training options for better accuracy and training process control
       const trainingOptions = {
-        iterations: 20000,    // Number of training iterations
-        errorThresh: 0.005,   // Acceptable error threshold
-        log: true,            // Enable training progress logging
-        logPeriod: 500,       // Log every 500 iterations
-        learningRate: 0.3     // Learning rate controls weight changes
+        iterations: 20000,
+        errorThresh: 0.005,
+        log: true,
+        logPeriod: 500,
+        learningRate: 0.3
       };
 
-      net.train(trainingData, trainingOptions);
+      // Preprocess training inputs to vector form
+      const processedData = trainingData.map(item => ({
+        input: textToInputVector(Object.keys(item.input)[0]),
+        output: item.output
+      }));
+
+      net.train(processedData, trainingOptions);
       if (callback) callback();
     })
     .catch(error => {
@@ -29,40 +51,32 @@ function loadTrainingData(callback) {
     });
 }
 
-// Preprocess input text: lowercase, strip non-alphanumeric
-function preprocess(text) {
-  const key = text.replace(/[^a-z0-9]/gi, '').toLowerCase();
-  const obj = {};
-  obj[key] = 1;
-  return obj;
-}
-
+// Use character-level input vector for run too
 function getBotReply(message) {
   if (!net) return "Training not loaded yet.";
-  const result = net.run(preprocess(message));
+  const inputVector = textToInputVector(message);
+  const result = net.run(inputVector);
   if (!result) return "Sorry, I don't understand.";
 
   const keys = Object.keys(result);
   if (keys.length === 0) return "Sorry, I don't understand.";
 
-  // Find max output and check confidence threshold
+  // Confidence threshold and weighted random selection
   let maxKey = keys[0];
   let maxVal = result[maxKey];
   keys.forEach(k => {
     if (result[k] > maxVal) {
-      maxKey = k;
       maxVal = result[k];
+      maxKey = k;
     }
   });
 
-  // Confidence threshold check; if too low, use fallback
   if (maxVal < 0.3) {
     return "Sorry, I didn't quite get that. Can you rephrase?";
   }
 
-  // Weighted random selection among outputs with significant score
   const filteredKeys = keys.filter(k => result[k] > 0.05);
-  let totalWeight = filteredKeys.reduce((sum, k) => sum + result[k], 0);
+  const totalWeight = filteredKeys.reduce((sum, k) => sum + result[k], 0);
   let threshold = Math.random() * totalWeight;
 
   for (const key of filteredKeys) {
@@ -70,5 +84,5 @@ function getBotReply(message) {
     if (threshold <= 0) return key;
   }
 
-  return maxKey; // fallback
+  return maxKey;
 }
