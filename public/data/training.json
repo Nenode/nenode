@@ -1,18 +1,14 @@
 [
-  // hi
   {"input": {"hi": 1}, "output": {"hello": 1}},
   {"input": {"hi": 1}, "output": {"hi": 1}},
   {"input": {"hi": 1}, "output": {"how are you": 1}},
   {"input": {"hi": 1}, "output": {"greetings": 1}},
   
-  
-  // hello
   {"input": {"hello": 1}, "output": {"hello": 1}},
   {"input": {"hello": 1}, "output": {"hi": 1}},
   {"input": {"hello": 1}, "output": {"how are you": 1}},
   {"input": {"hello": 1}, "output": {"greetings": 1}},
 
-  // howareyou
   {"input": {"howareyou": 1}, "output": {"good": 1}},
   {"input": {"howareyou": 1}, "output": {"i am good": 1}},
   {"input": {"howareyou": 1}, "output": {"excellent": 1}},
@@ -20,6 +16,5 @@
   {"input": {"howareyou": 1}, "output": {"great": 1}},
   {"input": {"howareyou": 1}, "output": {"i am great": 1}},
 
-  // bye
   {"input": {"bye": 1}, "output": {"goodbye": 1}},
 ]
