@@ -18,7 +18,7 @@
     { "input": { "python": 1 }, "output": { "code": 1 } },
     { "input": { "java": 1 }, "output": { "code": 1 } },
     { "input": { "program": 1 }, "output": { "code": 1 } },
-    { "input": { "programming": 1 }, "output": { "code": 1 } },
+    { "input": { "programming": 1 }, "output": { "code": 1 } }
   ],
   "responses": {
     "greeting": [
