@@ -2,54 +2,602 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat - Nenode</title>
-  <!-- Brain.js from CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
-  <script src="js/network.js" defer></script>
-  <script src="js/chat.js" defer></script>
   <style>
-    body { font-family: sans-serif; background: #eef1f4; }
+    :root {
+      --bg-primary: #fafafa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f5f5f5;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6a6a6a;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --user-bg: #eff6ff;
+      --user-text: #1e40af;
+      --bot-bg: #f5f5f5;
+      --bot-text: #0a0a0a;
+      --border: #e5e5e5;
+      --shadow: rgba(0, 0, 0, 0.04);
+    }
+
+    .dark {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #151515;
+      --bg-tertiary: #1a1a1a;
+      --text-primary: #f5f5f5;
+      --text-secondary: #8a8a8a;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --user-bg: #1e293b;
+      --user-text: #93c5fd;
+      --bot-bg: #1a1a1a;
+      --bot-text: #f5f5f5;
+      --border: #262626;
+      --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
     #chat-container {
-      max-width: 400px;
-      margin: 2em auto; padding: 1em;
-      background: #fff;
-      border: 1px solid #ccd;
-      border-radius: 8px;
-      box-shadow: 0 3px 12px #0002;
+      width: 100%;
+      max-width: 600px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      max-height: 700px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
-    h2 { text-align: center; letter-spacing: 1px; color: #3c6e71; }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
     #chat-log {
-      height: 260px; overflow-y: auto;
-      background: #f6fafd;
-      margin-bottom: 1em; padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #def;
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      scroll-behavior: smooth;
     }
-    .user { color: #3867d6; margin: .2em 0; }
-    .bot { color: #3c6e71; margin: .2em 0; }
-    #chat-form { display: flex; gap: 8px; }
+
+    #chat-log::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #chat-log::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #chat-log::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    #chat-log::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
+    .message {
+      display: flex;
+      gap: 0.75rem;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: messageIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes messageIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .user .message-avatar {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+    }
+
+    .bot .message-avatar {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .message-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .message-header {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .message-text {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      word-wrap: break-word;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: messageIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      margin-left: 40px;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      animation: typingBounce 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
+    }
+
+    footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+
+    #chat-form {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
     #chat-input {
-      flex: 1; padding: 6px 8px;
-      border-radius: 4px; border: 1px solid #ccd;
+      flex: 1;
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
+      transition: all 0.2s ease;
+      outline: none;
     }
-    #chat-form button {
-      background: #3c6e71; color: #fff;
-      border: 0; padding: 6px 18px;
-      border-radius: 4px; cursor: pointer;
-      font-weight: bold; letter-spacing: 1px;
-      transition: background .2s;
+
+    #chat-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
-    #chat-form button:hover { background: #264653; }
+
+    #chat-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    #send-btn {
+      padding: 0.875rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+    }
+
+    #send-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    #send-btn:active {
+      transform: translateY(0);
+    }
+
+    #send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 1rem;
+      opacity: 0.6;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+    }
+
+    .empty-text {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      #chat-container {
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+      }
+
+      header, footer {
+        padding: 1.25rem 1.5rem;
+      }
+
+      #chat-log {
+        padding: 1.25rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.25rem;
+      }
+
+      .message-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8125rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="chat-container">
-    <h2>Nenode Chat</h2>
-    <div id="chat-log"></div>
-    <form id="chat-form" autocomplete="off">
-      <input type="text" id="chat-input" maxlength="100" placeholder="Type your message..." required>
-      <button type="submit">Send</button>
-    </form>
+    <header>
+      <h1>Nenode</h1>
+      <div class="subtitle">Neural Network Chat</div>
+    </header>
+
+    <div id="chat-log">
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <div class="empty-text">Start a conversation</div>
+      </div>
+    </div>
+
+    <footer>
+      <form id="chat-form" autocomplete="off">
+        <input
+          type="text"
+          id="chat-input"
+          maxlength="200"
+          placeholder="Type a message..."
+          required
+        >
+        <button type="submit" id="send-btn">Send</button>
+      </form>
+    </footer>
   </div>
+
+  <script>
+    // Dark mode support
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      if (event.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    });
+
+    // Initialize Brain.js neural network
+    let net;
+    let isTraining = false;
+
+    async function initNetwork() {
+      net = new brain.NeuralNetwork({
+        hiddenLayers: [3]
+      });
+
+      // Train with basic conversation patterns
+      const trainingData = [
+        { input: { hello: 1 }, output: { greeting: 1 } },
+        { input: { hi: 1 }, output: { greeting: 1 } },
+        { input: { hey: 1 }, output: { greeting: 1 } },
+        { input: { how: 1, are: 1, you: 1 }, output: { status: 1 } },
+        { input: { what: 1, is: 1, your: 1, name: 1 }, output: { identity: 1 } },
+        { input: { bye: 1 }, output: { farewell: 1 } },
+        { input: { goodbye: 1 }, output: { farewell: 1 } },
+        { input: { thanks: 1 }, output: { gratitude: 1 } },
+        { input: { thank: 1, you: 1 }, output: { gratitude: 1 } },
+        { input: { help: 1 }, output: { assistance: 1 } },
+      ];
+
+      net.train(trainingData, {
+        iterations: 2000,
+        errorThresh: 0.005,
+      });
+    }
+
+    // Response templates
+    const responses = {
+      greeting: [
+        "Hello! How can I help you today?",
+        "Hi there! What's on your mind?",
+        "Hey! Nice to see you!",
+      ],
+      status: [
+        "I'm functioning well, thank you! How are you?",
+        "I'm doing great! How can I assist you?",
+        "All systems operational! What can I do for you?",
+      ],
+      identity: [
+        "I'm Nenode, a neural network-powered chat assistant!",
+        "I'm Nenode, here to help you!",
+        "My name is Nenode, your AI assistant!",
+      ],
+      farewell: [
+        "Goodbye! Have a great day!",
+        "See you later! Take care!",
+        "Bye! Come back soon!",
+      ],
+      gratitude: [
+        "You're welcome!",
+        "Happy to help!",
+        "Anytime! 😊",
+      ],
+      assistance: [
+        "I can chat with you! Try saying hello, asking how I am, or anything else!",
+        "I'm here to have a conversation with you. Feel free to ask me anything!",
+      ],
+      default: [
+        "That's interesting! Tell me more.",
+        "I see. What else would you like to talk about?",
+        "Fascinating! Keep going.",
+        "I'm learning from our conversation!",
+        "I understand. What else can I help with?",
+      ],
+    };
+
+    function getRandomResponse(category) {
+      const options = responses[category] || responses.default;
+      return options[Math.floor(Math.random() * options.length)];
+    }
+
+    function tokenize(text) {
+      const tokens = {};
+      const words = text.toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .split(/\s+/)
+        .filter(w => w.length > 0);
+
+      words.forEach(word => {
+        tokens[word] = 1;
+      });
+
+      return tokens;
+    }
+
+    function generateResponse(input) {
+      if (!net) return getRandomResponse('default');
+
+      const tokens = tokenize(input);
+      const output = net.run(tokens);
+
+      // Find the highest confidence category
+      let maxCategory = 'default';
+      let maxValue = 0;
+
+      for (const [category, value] of Object.entries(output)) {
+        if (value > maxValue && value > 0.5) {
+          maxValue = value;
+          maxCategory = category;
+        }
+      }
+
+      return getRandomResponse(maxCategory);
+    }
+
+    // Chat functionality
+    const chatLog = document.getElementById('chat-log');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    let messageCount = 0;
+
+    function formatTime() {
+      const now = new Date();
+      return now.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    function addMessage(text, sender) {
+      // Remove empty state on first message
+      if (messageCount === 0) {
+        chatLog.innerHTML = '';
+      }
+      messageCount++;
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+
+      const avatar = sender === 'user' ? 'U' : 'N';
+      const name = sender === 'user' ? 'You' : 'Nenode';
+
+      messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+          <div class="message-header">${name}</div>
+          <div class="message-text">${text}</div>
+          <div class="message-time">${formatTime()}</div>
+        </div>
+      `;
+
+      chatLog.appendChild(messageDiv);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+      const indicator = document.createElement('div');
+      indicator.className = 'typing-indicator';
+      indicator.id = 'typing-indicator';
+      indicator.innerHTML = `
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      `;
+      chatLog.appendChild(indicator);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const userMessage = chatInput.value.trim();
+      if (!userMessage) return;
+
+      // Disable input while processing
+      chatInput.disabled = true;
+      sendBtn.disabled = true;
+
+      // Add user message
+      addMessage(userMessage, 'user');
+      chatInput.value = '';
+
+      // Show typing indicator
+      showTypingIndicator();
+
+      // Simulate thinking time
+      await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
+
+      // Generate and add bot response
+      const botResponse = generateResponse(userMessage);
+      removeTypingIndicator();
+      addMessage(botResponse, 'bot');
+
+      // Re-enable input
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+      chatInput.focus();
+    }
+
+    chatForm.addEventListener('submit', handleSubmit);
+
+    // Initialize network on load
+    initNetwork();
+  </script>
 </body>
 </html>
+
