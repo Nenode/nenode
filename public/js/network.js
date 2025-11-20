@@ -1,22 +1,27 @@
 let net;
 
 function preprocess(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // Preprocess: lowercase and remove non-alphanumeric, then convert into object
+  const token = text.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const result = {};
+  if (token.trim().length > 0) {
+    result[token] = 1;
+  }
+  return result;
 }
 
 function loadTrainingData(callback) {
   console.log('Loading training data...');
   fetch('../data/training.json')
     .then(resp => {
-      console.log('Fetch response:', resp);
+      if (!resp.ok) throw new Error('Fetch failed');
       return resp.json();
     })
     .then(trainingData => {
       console.log('Training data loaded:', trainingData);
       net = new brain.NeuralNetwork();
-      // Just use trainingData directly to check for errors
       net.train(trainingData, {
-        iterations: 2000, // Faster for debug
+        iterations: 2000,
         log: true
       });
       console.log('Training finished!');
@@ -31,7 +36,10 @@ function loadTrainingData(callback) {
 function getBotReply(message) {
   if (!net) return "Training not finished yet.";
   if (!message) return "Please say something.";
-  const result = net.run(preprocess(message));
+
+  // Preprocess to be { token: 1 } form
+  const input = preprocess(message);
+  const result = net.run(input);
   console.log('Bot reply result:', result);
   if (!result) return "Sorry, I don't understand.";
   const keys = Object.keys(result);
