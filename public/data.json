@@ -1,0 +1,57 @@
+{
+  "trainingData": [
+    { "input": { "hello": 1 }, "output": { "greeting": 1 } },
+    { "input": { "hi": 1 }, "output": { "greeting": 1 } },
+    { "input": { "hey": 1 }, "output": { "greeting": 1 } },
+    { "input": { "how": 1, "are": 1, "you": 1 }, "output": { "status": 1 } },
+    { "input": { "what": 1, "is": 1, "your": 1, "name": 1 }, "output": { "identity": 1 } },
+    { "input": { "bye": 1 }, "output": { "farewell": 1 } },
+    { "input": { "goodbye": 1 }, "output": { "farewell": 1 } },
+    { "input": { "thanks": 1 }, "output": { "gratitude": 1 } },
+    { "input": { "thank": 1, "you": 1 }, "output": { "gratitude": 1 } },
+    { "input": { "help": 1 }, "output": { "assistance": 1 } }
+  ],
+  "responses": {
+    "greeting": [
+      "Hello! How can I help you today?",
+      "Hi there! What's on your mind?",
+      "Hey! Nice to see you!"
+    ],
+    "status": [
+      "I'm functioning well, thank you! How are you?",
+      "I'm doing great! How can I assist you?",
+      "All systems operational! What can I do for you?"
+    ],
+    "identity": [
+      "I'm Nenode, a neural network-powered chat assistant!",
+      "I'm Nenode, here to help you!",
+      "My name is Nenode, your AI assistant!"
+    ],
+    "farewell": [
+      "Goodbye! Have a great day!",
+      "See you later! Take care!",
+      "Bye! Come back soon!"
+    ],
+    "gratitude": [
+      "You're welcome!",
+      "Happy to help!",
+      "Anytime! 😊"
+    ],
+    "assistance": [
+      "I can chat with you! Try saying hello, asking how I am, or anything else!",
+      "I'm here to have a conversation with you. Feel free to ask me anything!"
+    ],
+    "default": [
+      "That's interesting! Tell me more.",
+      "I see. What else would you like to talk about?",
+      "Fascinating! Keep going.",
+      "I'm learning from our conversation!",
+      "I understand. What else can I help with?"
+    ]
+  },
+  "networkConfig": {
+    "hiddenLayers": [3],
+    "iterations": 2000,
+    "errorThresh": 0.005
+  }
+}
