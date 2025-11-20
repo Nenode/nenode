@@ -9,7 +9,16 @@
     { "input": { "goodbye": 1 }, "output": { "farewell": 1 } },
     { "input": { "thanks": 1 }, "output": { "gratitude": 1 } },
     { "input": { "thank": 1, "you": 1 }, "output": { "gratitude": 1 } },
-    { "input": { "help": 1 }, "output": { "assistance": 1 } }
+    { "input": { "help": 1 }, "output": { "assistance": 1 } },
+    { "input": { "code": 1 }, "output": { "code": 1 } },
+    { "input": { "html": 1 }, "output": { "code": 1 } },
+    { "input": { "js": 1 }, "output": { "code": 1 } },
+    { "input": { "javascript": 1 }, "output": { "code": 1 } },
+    { "input": { "file": 1 }, "output": { "code": 1 } },
+    { "input": { "python": 1 }, "output": { "code": 1 } },
+    { "input": { "java": 1 }, "output": { "code": 1 } },
+    { "input": { "program": 1 }, "output": { "code": 1 } },
+    { "input": { "programming": 1 }, "output": { "code": 1 } },
   ],
   "responses": {
     "greeting": [
@@ -41,6 +50,11 @@
       "I can chat with you! Try saying hello, asking how I am, or anything else!",
       "I'm here to have a conversation with you. Feel free to ask me anything!"
     ],
+    "code": [
+      "Sorry, but currently I can't write any code.",
+      "I can't write code yet.",
+      "Sorry, I can't write code yet."
+    ]
     "default": [
       "Sorry, I don't understand.",
       "Could you say that differently?",
