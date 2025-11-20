@@ -16,7 +16,7 @@ function loadTrainingData(callback) {
       net = new brain.NeuralNetwork();
       // Just use trainingData directly to check for errors
       net.train(trainingData, {
-        iterations: 1000, // Faster for debug
+        iterations: 2000, // Faster for debug
         log: true
       });
       console.log('Training finished!');
