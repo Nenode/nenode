@@ -42,11 +42,11 @@
       "I'm here to have a conversation with you. Feel free to ask me anything!"
     ],
     "default": [
-      "That's interesting! Tell me more.",
-      "I see. What else would you like to talk about?",
-      "Fascinating! Keep going.",
-      "I'm learning from our conversation!",
-      "I understand. What else can I help with?"
+      "Sorry, I don't understand.",
+      "Could you say that differently?",
+      "Can you say that differently?",
+      "I don't understand.",
+      "Could you say somthing else?"
     ]
   },
   "networkConfig": {
