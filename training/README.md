@@ -1,6 +1,6 @@
 ## Training Directory
 
-**This directory contains the training data (in `.json` format).**
+**This directory contains the (old) training data (in `.json` format).**
 
 ---
 
