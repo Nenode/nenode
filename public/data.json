@@ -4,7 +4,9 @@
     { "input": { "hi": 1 }, "output": { "greeting": 1 } },
     { "input": { "hey": 1 }, "output": { "greeting": 1 } },
     { "input": { "how": 1, "are": 1, "you": 1 }, "output": { "status": 1 } },
+    { "input": { "how": 1, "are": 1 }, "output": { "status": 1 } },
     { "input": { "what": 1, "is": 1, "your": 1, "name": 1 }, "output": { "identity": 1 } },
+    { "input": { "your": 1, "name": 1 }, "output": { "identity": 1 } },
     { "input": { "bye": 1 }, "output": { "farewell": 1 } },
     { "input": { "goodbye": 1 }, "output": { "farewell": 1 } },
     { "input": { "thanks": 1 }, "output": { "gratitude": 1 } },
@@ -44,7 +46,7 @@
     "gratitude": [
       "You're welcome!",
       "Happy to help!",
-      "Anytime! 😊"
+      "Anytime!"
     ],
     "assistance": [
       "I can chat with you! Try saying hello, asking how I am, or anything else!",
@@ -60,12 +62,12 @@
       "Could you say that differently?",
       "Can you say that differently?",
       "I don't understand.",
-      "Could you say somthing else?"
+      "Could you say something else?"
     ]
   },
   "networkConfig": {
-    "hiddenLayers": [3],
-    "iterations": 2000,
+    "hiddenLayers": [4, 4],
+    "iterations": 5000,
     "errorThresh": 0.005
   }
 }
