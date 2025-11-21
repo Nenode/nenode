@@ -1,6 +1,5 @@
 {
   "trainingData": [
-    /* GREETING */
     {"input":{"hello":1},"output":{"greeting":1}},
     {"input":{"hi":1},"output":{"greeting":1}},
     {"input":{"hey":1},"output":{"greeting":1}},
@@ -104,7 +103,6 @@
     {"input":{"hi":1,"folks":1},"output":{"greeting":1}},
     {"input":{"yo":1,"folks":1},"output":{"greeting":1}},
 
-    /* STATUS */
     {"input":{"how":1,"are":1,"you":1},"output":{"status":1}},
     {"input":{"how":1,"do":1,"you":1,"do":1},"output":{"status":1}},
     {"input":{"how":1,"is":1,"it":1,"going":1},"output":{"status":1}},
@@ -181,7 +179,6 @@
     {"input":{"how":1,"is":1,"your":1,"day":1,"bot":1},"output":{"status":1}},
     {"input":{"are":1,"you":1,"ok":1,"bot":1},"output":{"status":1}},
 
-    /* IDENTITY */
     {"input":{"what":1,"is":1,"your":1,"name":1},"output":{"identity":1}},
     {"input":{"who":1,"are":1,"you":1},"output":{"identity":1}},
     {"input":{"tell":1,"me":1,"about":1,"yourself":1},"output":{"identity":1}},
@@ -243,7 +240,6 @@
     {"input":{"what":1,"type":1,"of":1,"chatbot":1,"are":1,"you":1},"output":{"identity":1}},
     {"input":{"explain":1,"what":1,"you":1,"are":1},"output":{"identity":1}},
 
-    /* FAREWELL */
     {"input":{"bye":1},"output":{"farewell":1}},
     {"input":{"goodbye":1},"output":{"farewell":1}},
     {"input":{"see":1,"you":1,"later":1},"output":{"farewell":1}},
@@ -301,7 +297,6 @@
     {"input":{"im":1,"done":1},"output":{"farewell":1}},
     {"input":{"i'm":1,"done":1},"output":{"farewell":1}},
 
-    /* GRATITUDE */
     {"input":{"thanks":1},"output":{"gratitude":1}},
     {"input":{"thank":1,"you":1},"output":{"gratitude":1}},
     {"input":{"thx":1},"output":{"gratitude":1}},
@@ -349,7 +344,6 @@
     {"input":{"nice":1,"thanks":1},"output":{"gratitude":1}},
     {"input":{"sick":1,"thanks":1},"output":{"gratitude":1}},
 
-    /* ASSISTANCE */
     {"input":{"help":1},"output":{"assistance":1}},
     {"input":{"can":1,"you":1,"help":1},"output":{"assistance":1}},
     {"input":{"i":1,"need":1,"help":1},"output":{"assistance":1}},
@@ -399,7 +393,6 @@
     {"input":{"can":1,"you":1,"guide":1,"me":1},"output":{"assistance":1}},
     {"input":{"i":1,"need":1,"guidance":1},"output":{"assistance":1}},
 
-    /* CODE */
     {"input":{"code":1},"output":{"code":1}},
     {"input":{"javascript":1},"output":{"code":1}},
     {"input":{"java":1},"output":{"code":1}},
@@ -467,7 +460,6 @@
     {"input":{"write":1,"html":1,"page":1},"output":{"code":1}},
     {"input":{"write":1,"css":1,"style":1},"output":{"code":1}},
 
-    /* SMALLTALK */
     {"input":{"tell":1,"me":1,"a":1,"joke":1},"output":{"smalltalk":1}},
     {"input":{"tell":1,"me":1,"another":1,"joke":1},"output":{"smalltalk":1}},
     {"input":{"joke":1},"output":{"smalltalk":1}},
@@ -528,7 +520,6 @@
     {"input":{"do":1,"you":1,"get":1,"bored":1},"output":{"smalltalk":1}},
     {"input":{"are":1,"you":1,"bored":1},"output":{"smalltalk":1}},
 
-    /* DEFAULT / CLARIFICATION */
     {"input":{"sorry":1},"output":{"default":1}},
     {"input":{"i'm":1,"sorry":1},"output":{"default":1}},
     {"input":{"im":1,"sorry":1},"output":{"default":1}},
