@@ -211,6 +211,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.375rem;
+      position: relative;
     }
 
     .message-header {
@@ -218,6 +219,94 @@
       font-weight: 600;
       color: var(--text-primary);
       letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .message-menu {
+      position: relative;
+    }
+
+    .message-menu-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 0.375rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      transition: all 0.2s ease;
+      opacity: 0;
+    }
+
+    .bot.message:hover .message-menu-btn {
+      opacity: 1;
+    }
+
+    .message-menu-btn:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .message-menu-btn.active {
+      opacity: 1;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .message-menu-dropdown {
+      position: absolute;
+      top: calc(100% + 0.25rem);
+      right: 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px var(--shadow), 0 2px 4px rgba(0, 0, 0, 0.05);
+      min-width: 10rem;
+      z-index: 100;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+
+    .message-menu-dropdown.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .message-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .message-menu-item:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .message-menu-item i {
+      width: 1rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
 
     .message-text {
@@ -229,6 +318,12 @@
       padding: 0.875rem 1.125rem;
       border-radius: 1rem;
       background: var(--bg-secondary);
+      outline: none;
+    }
+
+    .message-text[contenteditable="true"] {
+      border: 1.5px solid var(--accent);
+      background: var(--bg-tertiary);
     }
 
     .user .message-text {
@@ -588,7 +683,7 @@ function formatTime() {
 }
 
 // Add message to chat log
-function addMessage(text, sender) {
+function addMessage(text, sender, userInput = '') {
   // Remove empty state on first message
   if (messageCount === 0) {
     chatLog.innerHTML = '';
@@ -597,14 +692,43 @@ function addMessage(text, sender) {
 
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${sender}`;
+  messageDiv.dataset.messageId = messageCount;
+  if (userInput) {
+    messageDiv.dataset.userInput = userInput;
+  }
 
   const avatar = sender === 'user' ? 'U' : '<img src="assets/img/logo.png" alt="Nenode">';
   const name = sender === 'user' ? 'You' : 'Nenode';
 
+  const menuHtml = sender === 'bot' ? `
+    <div class="message-menu">
+      <button class="message-menu-btn" onclick="toggleMessageMenu(event)">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <div class="message-menu-dropdown">
+        <button class="message-menu-item" onclick="editMessage(event)">
+          <i class="fas fa-edit"></i>
+          <span>Edit</span>
+        </button>
+        <button class="message-menu-item" onclick="copyMessage(event)">
+          <i class="fas fa-copy"></i>
+          <span>Copy</span>
+        </button>
+        <button class="message-menu-item" onclick="redoMessage(event)">
+          <i class="fas fa-redo"></i>
+          <span>Regenerate</span>
+        </button>
+      </div>
+    </div>
+  ` : '';
+
   messageDiv.innerHTML = `
     <div class="message-avatar">${avatar}</div>
     <div class="message-content">
-      <div class="message-header">${name}</div>
+      <div class="message-header">
+        ${name}
+        ${menuHtml}
+      </div>
       <div class="message-text">${text}</div>
       <div class="message-time">${formatTime()}</div>
     </div>
@@ -612,6 +736,131 @@ function addMessage(text, sender) {
 
   chatLog.appendChild(messageDiv);
   chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+// Toggle message menu
+function toggleMessageMenu(event) {
+  event.stopPropagation();
+  const btn = event.currentTarget;
+  const dropdown = btn.nextElementSibling;
+  const isActive = btn.classList.contains('active');
+
+  // Close all other menus
+  document.querySelectorAll('.message-menu-btn.active').forEach(b => {
+    b.classList.remove('active');
+    b.nextElementSibling.classList.remove('show');
+  });
+
+  if (!isActive) {
+    btn.classList.add('active');
+    dropdown.classList.add('show');
+  }
+}
+
+// Close menus when clicking outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.message-menu-btn.active').forEach(btn => {
+    btn.classList.remove('active');
+    btn.nextElementSibling.classList.remove('show');
+  });
+});
+
+// Edit message
+function editMessage(event) {
+  event.stopPropagation();
+  const messageDiv = event.target.closest('.message');
+  const messageText = messageDiv.querySelector('.message-text');
+
+  // Close menu
+  const btn = messageDiv.querySelector('.message-menu-btn');
+  btn.classList.remove('active');
+  btn.nextElementSibling.classList.remove('show');
+
+  // Make editable
+  messageText.contentEditable = true;
+  messageText.focus();
+
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(messageText);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  // Handle blur to save
+  const handleBlur = () => {
+    messageText.contentEditable = false;
+    messageText.removeEventListener('blur', handleBlur);
+  };
+
+  messageText.addEventListener('blur', handleBlur);
+
+  // Handle Enter key
+  messageText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      messageText.blur();
+    }
+  }, { once: true });
+}
+
+// Copy message
+async function copyMessage(event) {
+  event.stopPropagation();
+  const messageDiv = event.target.closest('.message');
+  const messageText = messageDiv.querySelector('.message-text').textContent;
+
+  try {
+    await navigator.clipboard.writeText(messageText);
+
+    // Visual feedback
+    const btn = event.target.closest('.message-menu-item');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+    }, 1500);
+  } catch (err) {
+    console.error('Failed to copy:', err);
+  }
+
+  // Close menu after short delay
+  setTimeout(() => {
+    const menuBtn = messageDiv.querySelector('.message-menu-btn');
+    menuBtn.classList.remove('active');
+    menuBtn.nextElementSibling.classList.remove('show');
+  }, 1500);
+}
+
+// Redo message
+async function redoMessage(event) {
+  event.stopPropagation();
+  const messageDiv = event.target.closest('.message');
+  const userInput = messageDiv.dataset.userInput;
+
+  if (!userInput) return;
+
+  // Close menu
+  const btn = messageDiv.querySelector('.message-menu-btn');
+  btn.classList.remove('active');
+  btn.nextElementSibling.classList.remove('show');
+
+  // Disable the message temporarily
+  const messageText = messageDiv.querySelector('.message-text');
+  const originalText = messageText.textContent;
+  messageText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Regenerating...';
+
+  // Generate new response
+  await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
+  const newResponse = generateResponse(userInput);
+
+  // Update message
+  messageText.textContent = newResponse;
+
+  // Update timestamp
+  const timeDiv = messageDiv.querySelector('.message-time');
+  timeDiv.textContent = formatTime();
 }
 
 // Show typing indicator
@@ -662,7 +911,7 @@ async function handleSubmit(e) {
   // Generate and add bot response
   const botResponse = generateResponse(userMessage);
   removeTypingIndicator();
-  addMessage(botResponse, 'bot');
+  addMessage(botResponse, 'bot', userMessage);
 
   // Re-enable input
   chatInput.disabled = false;
