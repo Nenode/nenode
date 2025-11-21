@@ -1,6 +1,6 @@
 # Nenode
 
-🤖 Simple AI Neural Network
+🤖 Nenode AI
 
 ---
 
