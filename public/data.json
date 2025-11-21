@@ -4,23 +4,12 @@
     { "input": { "hi": 1 }, "output": { "greeting": 1 } },
     { "input": { "hey": 1 }, "output": { "greeting": 1 } },
     { "input": { "how": 1, "are": 1, "you": 1 }, "output": { "status": 1 } },
-    { "input": { "how": 1, "are": 1 }, "output": { "status": 1 } },
     { "input": { "what": 1, "is": 1, "your": 1, "name": 1 }, "output": { "identity": 1 } },
-    { "input": { "your": 1, "name": 1 }, "output": { "identity": 1 } },
     { "input": { "bye": 1 }, "output": { "farewell": 1 } },
     { "input": { "goodbye": 1 }, "output": { "farewell": 1 } },
     { "input": { "thanks": 1 }, "output": { "gratitude": 1 } },
     { "input": { "thank": 1, "you": 1 }, "output": { "gratitude": 1 } },
-    { "input": { "help": 1 }, "output": { "assistance": 1 } },
-    { "input": { "code": 1 }, "output": { "code": 1 } },
-    { "input": { "html": 1 }, "output": { "code": 1 } },
-    { "input": { "js": 1 }, "output": { "code": 1 } },
-    { "input": { "javascript": 1 }, "output": { "code": 1 } },
-    { "input": { "file": 1 }, "output": { "code": 1 } },
-    { "input": { "python": 1 }, "output": { "code": 1 } },
-    { "input": { "java": 1 }, "output": { "code": 1 } },
-    { "input": { "program": 1 }, "output": { "code": 1 } },
-    { "input": { "programming": 1 }, "output": { "code": 1 } }
+    { "input": { "help": 1 }, "output": { "assistance": 1 } }
   ],
   "responses": {
     "greeting": [
@@ -46,28 +35,23 @@
     "gratitude": [
       "You're welcome!",
       "Happy to help!",
-      "Anytime!"
+      "Anytime! 😊"
     ],
     "assistance": [
       "I can chat with you! Try saying hello, asking how I am, or anything else!",
       "I'm here to have a conversation with you. Feel free to ask me anything!"
-    ],
-    "code": [
-      "Sorry, but currently I can't write any code.",
-      "I can't write code yet.",
-      "Sorry, I can't write code yet."
     ],
     "default": [
       "Sorry, I don't understand.",
       "Could you say that differently?",
       "Can you say that differently?",
       "I don't understand.",
-      "Could you say something else?"
+      "Could you say somthing else?"
     ]
   },
   "networkConfig": {
-    "hiddenLayers": [4, 4],
-    "iterations": 5000,
+    "hiddenLayers": [3],
+    "iterations": 2000,
     "errorThresh": 0.005
   }
 }
