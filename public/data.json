@@ -1,52 +1,173 @@
 {
   "trainingData": [
-    { "input": { "hello": 1 }, "output": { "greeting": 1 } },
-    { "input": { "hi": 1 }, "output": { "greeting": 1 } },
-    { "input": { "hey": 1 }, "output": { "greeting": 1 } },
-    { "input": { "how": 1, "are": 1, "you": 1 }, "output": { "status": 1 } },
-    { "input": { "what": 1, "is": 1, "your": 1, "name": 1 }, "output": { "identity": 1 } },
-    { "input": { "bye": 1 }, "output": { "farewell": 1 } },
-    { "input": { "goodbye": 1 }, "output": { "farewell": 1 } },
-    { "input": { "thanks": 1 }, "output": { "gratitude": 1 } },
-    { "input": { "thank": 1, "you": 1 }, "output": { "gratitude": 1 } },
-    { "input": { "help": 1 }, "output": { "assistance": 1 } }
+    {"input":{"hello":1},"output":{"greeting":1}},
+    {"input":{"hi":1},"output":{"greeting":1}},
+    {"input":{"hey":1},"output":{"greeting":1}},
+    {"input":{"good":1,"morning":1},"output":{"greeting":1}},
+    {"input":{"good":1,"afternoon":1},"output":{"greeting":1}},
+    {"input":{"good":1,"evening":1},"output":{"greeting":1}},
+    {"input":{"hiya":1},"output":{"greeting":1}},
+    {"input":{"howdy":1},"output":{"greeting":1}},
+    {"input":{"whats":1,"up":1},"output":{"greeting":1}},
+    {"input":{"hello":1,"there":1},"output":{"greeting":1}},
+    {"input":{"hiya":1,"friend":1},"output":{"greeting":1}},
+    {"input":{"greetings":1},"output":{"greeting":1}},
+    {"input":{"hey":1,"buddy":1},"output":{"greeting":1}},
+    
+    {"input":{"how":1,"are":1,"you":1},"output":{"status":1}},
+    {"input":{"how":1,"do":1,"you":1,"do":1},"output":{"status":1}},
+    {"input":{"how":1,"is":1,"it":1,"going":1},"output":{"status":1}},
+    {"input":{"are":1,"you":1,"okay":1},"output":{"status":1}},
+    {"input":{"feeling":1,"good":1},"output":{"status":1}},
+    {"input":{"are":1,"you":1,"there":1},"output":{"status":1}},
+    {"input":{"what's":1,"up":1},"output":{"status":1}},
+    {"input":{"how's":1,"everything":1},"output":{"status":1}},
+    {"input":{"how's":1,"your":1,"day":1},"output":{"status":1}},
+
+    {"input":{"what":1,"is":1,"your":1,"name":1},"output":{"identity":1}},
+    {"input":{"who":1,"are":1,"you":1},"output":{"identity":1}},
+    {"input":{"tell":1,"me":1,"about":1,"yourself":1},"output":{"identity":1}},
+    {"input":{"what":1,"do":1,"you":1,"do":1},"output":{"identity":1}},
+    {"input":{"how":1,"old":1,"are":1,"you":1},"output":{"identity":1}},
+    {"input":{"who":1,"created":1,"you":1},"output":{"identity":1}},
+    {"input":{"are":1,"you":1,"an":1,"ai":1},"output":{"identity":1}},
+    {"input":{"do":1,"you":1,"learn":1},"output":{"identity":1}},
+    {"input":{"where":1,"are":1,"you":1,"from":1},"output":{"identity":1}},
+
+    {"input":{"bye":1},"output":{"farewell":1}},
+    {"input":{"goodbye":1},"output":{"farewell":1}},
+    {"input":{"see":1,"you":1,"later":1},"output":{"farewell":1}},
+    {"input":{"farewell":1},"output":{"farewell":1}},
+    {"input":{"take":1,"care":1},"output":{"farewell":1}},
+    {"input":{"catch":1,"you":1,"later":1},"output":{"farewell":1}},
+    {"input":{"gotta":1,"go":1},"output":{"farewell":1}},
+    {"input":{"talk":1,"to":1,"you":1,"soon":1},"output":{"farewell":1}},
+
+    {"input":{"thanks":1},"output":{"gratitude":1}},
+    {"input":{"thank":1,"you":1},"output":{"gratitude":1}},
+    {"input":{"thx":1},"output":{"gratitude":1}},
+    {"input":{"much":1,"appreciated":1},"output":{"gratitude":1}},
+    {"input":{"i":1,"appreciate":1,"it":1},"output":{"gratitude":1}},
+    {"input":{"thank":1,"you":1,"so":1,"much":1},"output":{"gratitude":1}},
+    {"input":{"thanks":1,"a":1,"lot":1},"output":{"gratitude":1}},
+    
+    {"input":{"help":1},"output":{"assistance":1}},
+    {"input":{"can":1,"you":1,"help":1},"output":{"assistance":1}},
+    {"input":{"i":1,"need":1,"help":1},"output":{"assistance":1}},
+    {"input":{"assist":1,"me":1},"output":{"assistance":1}},
+    {"input":{"support":1},"output":{"assistance":1}},
+    {"input":{"can":1,"you":1,"assist":1,"me":1},"output":{"assistance":1}},
+    {"input":{"could":1,"you":1,"help":1,"me":1},"output":{"assistance":1}},
+    
+    {"input":{"code":1},"output":{"code":1}},
+    {"input":{"javascript":1},"output":{"code":1}},
+    {"input":{"java":1},"output":{"code":1}},
+    {"input":{"python":1},"output":{"code":1}},
+    {"input":{"html":1},"output":{"code":1}},
+    {"input":{"css":1},"output":{"code":1}},
+    {"input":{"can":1,"you":1,"write":1,"code":1},"output":{"code":1}},
+    {"input":{"show":1,"me":1,"code":1},"output":{"code":1}},
+    {"input":{"explain":1,"javascript":1},"output":{"code":1}},
+    {"input":{"help":1,"with":1,"python":1},"output":{"code":1}},
+    {"input":{"write":1,"a":1,"program":1},"output":{"code":1}},
+
+    {"input":{"tell":1,"me":1,"a":1,"joke":1},"output":{"smalltalk":1}},
+    {"input":{"do":1,"you":1,"like":1,"music":1},"output":{"smalltalk":1}},
+    {"input":{"what":1,"is":1,"the":1,"weather":1},"output":{"smalltalk":1}},
+    {"input":{"tell":1,"me":1,"something":1,"interesting":1},"output":{"smalltalk":1}},
+    {"input":{"what":1,"can":1,"you":1,"do":1},"output":{"smalltalk":1}},
+    {"input":{"how":1,"was":1,"your":1,"day":1},"output":{"smalltalk":1}},
+    {"input":{"i":1,"love":1,"coding":1},"output":{"smalltalk":1}},
+    {"input":{"do":1,"you":1,"like":1,"chatting":1},"output":{"smalltalk":1}},
+    
+    {"input":{"thank":1},"output":{"gratitude":1}},
+    {"input":{"thanks":1},"output":{"gratitude":1}},
+    {"input":{"sorry":1},"output":{"default":1}},
+    {"input":{"don't":1,"understand":1},"output":{"default":1}},
+    {"input":{"could":1,"you":1,"repeat":1},"output":{"default":1}},
+    {"input":{"can":1,"you":1,"explain":1},"output":{"default":1}}
   ],
   "responses": {
     "greeting": [
       "Hello! How can I help you today?",
       "Hi there! What's on your mind?",
-      "Hey! Nice to see you!"
+      "Hey! Nice to see you!",
+      "Good day! How's it going?",
+      "Greetings! What can I do for you?",
+      "Hello! Ready to chat?",
+      "Hey there! How can I assist?"
     ],
     "status": [
       "I'm functioning well, thank you! How are you?",
       "I'm doing great! How can I assist you?",
-      "All systems operational! What can I do for you?"
+      "All systems operational! What can I do for you?",
+      "I'm fine, thanks for asking!",
+      "Doing good! How about you?",
+      "Feeling ready to help!",
+      "Everything's running smoothly!"
     ],
     "identity": [
       "I'm Nenode, a neural network-powered chat assistant!",
       "I'm Nenode, here to help you!",
-      "My name is Nenode, your AI assistant!"
+      "My name is Nenode, your AI assistant!",
+      "I am a chatbot designed to assist you.",
+      "I'm an AI designed for casual conversation and help.",
+      "Nenode at your service!",
+      "I'm your friendly AI chatbot."
     ],
     "farewell": [
       "Goodbye! Have a great day!",
       "See you later! Take care!",
-      "Bye! Come back soon!"
+      "Bye! Come back soon!",
+      "Farewell! Wishing you well!",
+      "Talk to you later!",
+      "Catch you next time!",
+      "Have a nice one!"
     ],
     "gratitude": [
       "You're welcome!",
       "Happy to help!",
-      "Anytime! 😊"
+      "Anytime! 😊",
+      "No problem!",
+      "Glad I could assist!",
+      "My pleasure!",
+      "Always here to help!"
     ],
     "assistance": [
       "I can chat with you! Try saying hello, asking how I am, or anything else!",
-      "I'm here to have a conversation with you. Feel free to ask me anything!"
+      "I'm here to have a conversation with you. Feel free to ask me anything!",
+      "Ask me about coding, your identity questions, or just say hi.",
+      "Need help? Just ask!",
+      "I'm happy to assist you with questions or chats.",
+      "How can I assist you today?",
+      "Let me know if you need anything!"
+    ],
+    "code": [
+      "Sorry, but currently I can't write any code.",
+      "I can't write code yet.",
+      "Sorry, I can't write code yet.",
+      "I can discuss code concepts but can't generate code yet.",
+      "Coding help is coming soon!",
+      "Code discussions are welcome!",
+      "Ask me about programming concepts!"
+    ],
+    "smalltalk": [
+      "I love chatting about music!",
+      "Why did the chicken cross the road? To get to the other side!",
+      "I enjoy learning new things every day.",
+      "Tell me what you like to do!",
+      "I'm always here to talk!",
+      "Let's chat more!",
+      "I'm up for some fun talk!"
     ],
     "default": [
       "Sorry, I don't understand.",
       "Could you say that differently?",
       "Can you say that differently?",
       "I don't understand.",
-      "Could you say somthing else?"
+      "Could you say something else?",
+      "I'm not sure what you mean.",
+      "Try rephrasing that, please."
     ]
   },
   "networkConfig": {
